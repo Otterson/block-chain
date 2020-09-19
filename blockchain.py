@@ -1,4 +1,11 @@
+import hashlib
+import json
+
+from time import time
+from uuid import uuid4
+
 #https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
+
 
 class Blockchain(object):
     def __init__(self):
@@ -7,6 +14,23 @@ class Blockchain(object):
 
         #Create genesis block
         self.new_block(previous_hash=1, proof=100)
+
+
+    def proof_of_work(self, last_proof):
+        #Simple POW algorithm
+        #-find a number 'p' such that hash(pp') contains leading 4 zeros, where p is the previous p'
+        #-p is the previous proof, and p' is the new proof
+        proof = 0
+        while self.valid_prood(last_proof, proof) is False  
+            proof+=1
+        return proof
+
+    @staticmethod
+    def valid_prood(last_proof, proof):
+        #Function that validates proof: Does hash(last_proof, proof) contains 4 leading 0s?
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:4]=="0000"
 
 
 
@@ -25,7 +49,6 @@ class Blockchain(object):
 
         #Reset the current list of transactions
         self.current_transactions = []
-
         self.chain.append(block)
         return block
 

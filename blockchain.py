@@ -7,8 +7,6 @@ from urllib.parse import urlparse
 from time import time
 from uuid import uuid4
 
-#https://hackernoon.com/learn-blockchains-by-building-one-117428612f46
-
 #Conflict rule: longest valid chain is authoritative. This allows us to easily resolve
 #the conflict when two chains are different
 class Blockchain(object):
@@ -222,7 +220,7 @@ def full_chain():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port = 5000)    #run on localhost port 5000
 
-    
+
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()

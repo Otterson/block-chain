@@ -29,7 +29,7 @@ class Blockchain(object):
         return proof
 
     @staticmethod
-    def valid_prood(last_proof, proof):
+    def valid_proof(last_proof, proof):
         #Function that validates proof: Does hash(last_proof, proof) contains 4 leading 0s?
         guess = f'{last_proof}{proof}'.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
@@ -60,13 +60,13 @@ class Blockchain(object):
     def new_transaction(self, sender, recipient, amount):
         #Creates a new transaction to go into the next mined block
         #Returns the index of the int index of the block that will hold this transaction
-        self.currect_transactions.append({
+        self.current_transactions.append({
             'sender':sender,
             'recipient':recipient,
             'amount':amount
         })
 
-        return self.last_block['index']+1
+        return self.last_block()['index']+1
 
 
 
@@ -93,17 +93,17 @@ class Blockchain(object):
 app = Flask(__name__)
 
 #Generate a globally unique address for this node
-node_identifier = str(uuid4().replace('-',''))
+node_identifier = str(uuid4()).replace('-','')
 
 #Instantiate Blockchain obj
 blockchain = Blockchain()
 
 
 #/mine Endpoint has to: calculate POW, reward by adding new transaction of 1 coin, forge and add new block
-@app.route('/mine', methods['GET'])
+@app.route('/mine', methods=['GET'])
 def mine():
     #Run POW algorithm to get the next proof
-    last_block = blockchain.last_block
+    last_block = blockchain.last_block()
     last_proof = last_block['proof']
     proof = blockchain.proof_of_work(last_proof)
 
@@ -130,8 +130,12 @@ def new_transaction():
 
     #check that all required fields are in POST data
     required = ['sender', 'recipient', 'amount']
-    if not all (k in values for k in required):
-        return 'Missing values', 400
+    # if not all (k in values for k in required):
+    #     return 'Missing values', 400
+    for req in required:
+        check = req in values
+        if check is False:
+            return 'Missing values', 400
 
     #Create a new transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])

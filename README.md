@@ -8,6 +8,6 @@ This blockchain can coordinate chains between multiple machines/virtual environm
 # Docker
 This blockchain program can be run in a Docker container. To build the repo in a local docker container, you can follow the instructions below:
 1. Clone repository
-2. Build docker container using $ docker build -t block-chain
-3. Run container docker run --rm -p 80:5000 block-chain
+2. Build docker container-> $ docker build -t block-chain
+3. Run container-> $ docker run --rm -p 80:5000 block-chain
 4. Add instances using the sommand above with variations in the public port number (81:5000, 82:5000, etc)
